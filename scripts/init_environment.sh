@@ -2,7 +2,7 @@
 
 # check required variables are specified.
 GITHUB_REPO="https://price-industries@dev.azure.com/price-industries/Data%20Management/_git/anvil-data-infrastructure-data-services"
-GITHUB_PAT_TOKEN="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"
+GITHUB_PAT_TOKEN="egsdurs4lgp27xghqwazowqqpzb22wmphudni5yp5k6dbsdq4hya"
 AZDO_PROJECT="Data Management"
 AZURE_LOCATION="eastus2"
 AZURE_SUBSCRIPTION_ID="48fa33af-e847-429c-9400-c93a7d3d8f47"
