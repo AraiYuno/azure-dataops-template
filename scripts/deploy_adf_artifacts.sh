@@ -75,7 +75,6 @@ echo "Deploying Data Factory artifacts."
 # Deploy all Linked Services
 createLinkedService "Ls_KeyVault_01"
 createLinkedService "Ls_AdlsGen2_01"
-createLinkedService "Ls_AzureSQLDW_01"
 createLinkedService "Ls_AzureDatabricks_01"
 createLinkedService "Ls_Rest_MelParkSensors_01"
 # Deploy all Datasets

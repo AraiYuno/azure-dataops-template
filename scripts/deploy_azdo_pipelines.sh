@@ -62,7 +62,6 @@ createPipeline () {
 
 # Build Pipelines
 createPipeline "ci-qa-python" "This pipeline runs python unit tests and linting."
-createPipeline "ci-qa-sql" "This pipeline builds the sql dacpac"
 createPipeline "ci-artifacts" "This pipeline publishes build artifacts"
 
 # Release Pipelines

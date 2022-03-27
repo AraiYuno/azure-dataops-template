@@ -63,7 +63,7 @@ arm_output=$(az deployment group validate \
     --resource-group "$resource_group_name" \
     --template-file "./infrastructure/main.bicep" \
     --parameters @"./infrastructure/main.parameters.${ENV_NAME}.json" \
-    --parameters project="${PROJECT}" keyvault_owner_object_id="${kv_owner_object_id}" deployment_id="${DEPLOYMENT_ID}" sql_server_password="${AZURESQL_SERVER_PASSWORD}" \
+    --parameters project="${PROJECT}" keyvault_owner_object_id="${kv_owner_object_id}" deployment_id="${DEPLOYMENT_ID}" \
     --output json)
 
 # Deploy arm template
@@ -72,7 +72,7 @@ arm_output=$(az deployment group create \
     --resource-group "$resource_group_name" \
     --template-file "./infrastructure/main.bicep" \
     --parameters @"./infrastructure/main.parameters.${ENV_NAME}.json" \
-    --parameters project="${PROJECT}" deployment_id="${DEPLOYMENT_ID}" keyvault_owner_object_id="${kv_owner_object_id}" sql_server_password="${AZURESQL_SERVER_PASSWORD}" \
+    --parameters project="${PROJECT}" deployment_id="${DEPLOYMENT_ID}" keyvault_owner_object_id="${kv_owner_object_id}" \
     --output json)
 
 if [[ -z $arm_output ]]; then
@@ -113,11 +113,6 @@ az storage container create --name $storage_file_system --account-name "$azure_s
 echo "Creating folders within the file system."
 # Create folders for databricks libs
 az storage fs directory create -n '/sys/databricks/libs' -f $storage_file_system --account-name "$azure_storage_account" --account-key "$azure_storage_key"
-# Create folders for SQL external tables
-az storage fs directory create -n '/data/dw/fact_parking' -f $storage_file_system --account-name "$azure_storage_account" --account-key "$azure_storage_key"
-az storage fs directory create -n '/data/dw/dim_st_marker' -f $storage_file_system --account-name "$azure_storage_account" --account-key "$azure_storage_key"
-az storage fs directory create -n '/data/dw/dim_parking_bay' -f $storage_file_system --account-name "$azure_storage_account" --account-key "$azure_storage_key"
-az storage fs directory create -n '/data/dw/dim_location' -f $storage_file_system --account-name "$azure_storage_account" --account-key "$azure_storage_key"
 
 echo "Uploading seed data to data/seed"
 az storage blob upload --container-name $storage_file_system --account-name "$azure_storage_account" --account-key "$azure_storage_key" \
@@ -129,31 +124,6 @@ az storage blob upload --container-name $storage_file_system --account-name "$az
 az keyvault secret set --vault-name "$kv_name" --name "datalakeAccountName" --value "$azure_storage_account"
 az keyvault secret set --vault-name "$kv_name" --name "datalakeKey" --value "$azure_storage_key"
 az keyvault secret set --vault-name "$kv_name" --name "datalakeurl" --value "https://$azure_storage_account.dfs.core.windows.net"
-
-###################
-# SQL
-
-echo "Retrieving SQL Server information from the deployment."
-# Retrieve SQL creds
-sql_server_name=$(echo "$arm_output" | jq -r '.properties.outputs.synapse_sql_pool_output.value.name')
-sql_server_username=$(echo "$arm_output" | jq -r '.properties.outputs.synapse_sql_pool_output.value.username')
-sql_server_password=$(echo "$arm_output" | jq -r '.properties.outputs.synapse_sql_pool_output.value.password')
-sql_dw_database_name=$(echo "$arm_output" | jq -r '.properties.outputs.synapse_sql_pool_output.value.synapse_pool_name')
-
-# SQL Connection String
-sql_dw_connstr_nocred=$(az sql db show-connection-string --client ado.net \
-    --name "$sql_dw_database_name" --server "$sql_server_name" --output json |
-    jq -r .)
-sql_dw_connstr_uname=${sql_dw_connstr_nocred/<username>/$sql_server_username}
-sql_dw_connstr_uname_pass=${sql_dw_connstr_uname/<password>/$sql_server_password}
-
-# Store in Keyvault
-az keyvault secret set --vault-name "$kv_name" --name "sqlsrvrName" --value "$sql_server_name"
-az keyvault secret set --vault-name "$kv_name" --name "sqlsrvUsername" --value "$sql_server_username"
-az keyvault secret set --vault-name "$kv_name" --name "sqlsrvrPassword" --value "$sql_server_password"
-az keyvault secret set --vault-name "$kv_name" --name "sqldwDatabaseName" --value "$sql_dw_database_name"
-az keyvault secret set --vault-name "$kv_name" --name "sqldwConnectionString" --value "$sql_dw_connstr_uname_pass"
-
 
 ####################
 # APPLICATION INSIGHTS
@@ -281,10 +251,6 @@ KV_URL=$kv_dns_name \
 DATABRICKS_TOKEN=$databricks_token \
 DATABRICKS_HOST=$databricks_host \
 DATABRICKS_WORKSPACE_RESOURCE_ID=$databricks_workspace_resource_id \
-SQL_SERVER_NAME=$sql_server_name \
-SQL_SERVER_USERNAME=$sql_server_username \
-SQL_SERVER_PASSWORD=$sql_server_password \
-SQL_DW_DATABASE_NAME=$sql_dw_database_name \
 AZURE_STORAGE_KEY=$azure_storage_key \
 AZURE_STORAGE_ACCOUNT=$azure_storage_account \
 DATAFACTORY_NAME=$datafactory_name \
@@ -304,10 +270,6 @@ cat << EOF >> "$env_file"
 # ------ Configuration from deployment on ${TIMESTAMP} -----------
 RESOURCE_GROUP_NAME=${resource_group_name}
 AZURE_LOCATION=${AZURE_LOCATION}
-SQL_SERVER_NAME=${sql_server_name}
-SQL_SERVER_USERNAME=${sql_server_username}
-SQL_SERVER_PASSWORD=${sql_server_password}
-SQL_DW_DATABASE_NAME=${sql_dw_database_name}
 AZURE_STORAGE_ACCOUNT=${azure_storage_account}
 AZURE_STORAGE_KEY=${azure_storage_key}
 SP_STOR_NAME=${sp_stor_name}
