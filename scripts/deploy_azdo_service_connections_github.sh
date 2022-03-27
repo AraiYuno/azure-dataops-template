@@ -35,14 +35,14 @@ set -o xtrace # For debugging
 # REQUIRED ENV VARIABLES:
 #
 # PROJECT
-# GITHUB_PAT_TOKEN
+# AZURE_REPO_PAT_TOKEN
 # GITHUB_REPO_URL
 
 ###############
 # Setup Github service connection
 
 # github_sc_name="${PROJECT}-github"
-# export AZURE_DEVOPS_EXT_GITHUB_PAT=$GITHUB_PAT_TOKEN
+# export AZURE_DEVOPS_EXT_GITHUB_PAT=$AZURE_REPO_PAT_TOKEN
 
 # if sc_id=$(az devops service-endpoint list -o tsv | grep "$github_sc_name" | awk '{print $3}'); then
 #     echo "Service connection: $github_sc_name already exists. Deleting..."

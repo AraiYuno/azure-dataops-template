@@ -11,17 +11,11 @@ AZDO_ORGANIZATION_URL="https://dev.azure.com/price-industries/"
 ###
 # REQUIRED. Environment variables for deployment script
 
-# Name of your imported github repo in this form `<my_github_handle>/<repo>`. (ei. "devlace/mdw-dataops-import")
-GITHUB_REPO="https://dev.azure.com/price-industries/Data%20Management/_git/anvil-data-infrastructure-data-services"
-
-# a Github PAT token. Generate them [here](https://github.com/settings/tokens). This requires "repo" scope.
-GITHUB_PAT_TOKEN="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"
-
+# Name of Azure Repo
+AZURE_REPO="anvil-data-services"
 
 ###
 # OPTIONAL. Environment variables for deployment script.
-# Uncomment to set values.
-
 # Azure location to deploy resources. Default: westus
 AZURE_LOCATION="eastus2"
 

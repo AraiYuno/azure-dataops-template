@@ -40,9 +40,9 @@ set -o xtrace # For debugging
 # DEV_DATAFACTORY_NAME
 
 # Retrieve Github Service Connection Id
-github_sc_name="${PROJECT}-github"
-github_sc_id=$(az devops service-endpoint list --output json |
-    jq -r --arg NAME "$github_sc_name" '.[] | select(.name==$NAME) | .id')
+# github_sc_name="${PROJECT}-github"
+# github_sc_id=$(az devops service-endpoint list --output json |
+#     jq -r --arg NAME "$github_sc_name" '.[] | select(.name==$NAME) | .id')
 
 createPipeline () {
     declare pipeline_name=$1
@@ -51,9 +51,10 @@ createPipeline () {
     pipeline_id=$(az pipelines create \
         --name "$full_pipeline_name" \
         --description "$pipeline_description" \
-        --repository "$GITHUB_REPO_URL" \
+        --repository-type tfsgit \
+        --repository "$AZURE_REPO" \
         --branch "$AZDO_PIPELINES_BRANCH_NAME" \
-        --yaml-path "/e2e_samples/parking_sensors/devops/azure-pipelines-$pipeline_name.yml" \
+        --yaml-path "/devops/azure-pipelines-$pipeline_name.yml" \
         --service-connection "$github_sc_id" \
         --skip-first-run true \
         --output json | jq -r '.id')
