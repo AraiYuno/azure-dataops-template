@@ -35,14 +35,9 @@ set -o xtrace # For debugging
 # REQUIRED ENV VARIABLES:
 #
 # PROJECT
-# GITHUB_REPO_URL
+# AZURE_REPO
 # AZDO_PIPELINES_BRANCH_NAME
 # DEV_DATAFACTORY_NAME
-
-# Retrieve Github Service Connection Id
-# github_sc_name="${PROJECT}-github"
-# github_sc_id=$(az devops service-endpoint list --output json |
-#     jq -r --arg NAME "$github_sc_name" '.[] | select(.name==$NAME) | .id')
 
 createPipeline () {
     declare pipeline_name=$1
@@ -55,7 +50,6 @@ createPipeline () {
         --repository "$AZURE_REPO" \
         --branch "$AZDO_PIPELINES_BRANCH_NAME" \
         --yaml-path "/devops/azure-pipelines-$pipeline_name.yml" \
-        --service-connection "$github_sc_id" \
         --skip-first-run true \
         --output json | jq -r '.id')
     echo "$pipeline_id"
