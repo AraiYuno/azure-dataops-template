@@ -41,20 +41,20 @@ set -o xtrace # For debugging
 ###############
 # Setup Github service connection
 
-github_sc_name="${PROJECT}-github"
-export AZURE_DEVOPS_EXT_GITHUB_PAT=$GITHUB_PAT_TOKEN
+# github_sc_name="${PROJECT}-github"
+# export AZURE_DEVOPS_EXT_GITHUB_PAT=$GITHUB_PAT_TOKEN
 
-if sc_id=$(az devops service-endpoint list -o tsv | grep "$github_sc_name" | awk '{print $3}'); then
-    echo "Service connection: $github_sc_name already exists. Deleting..."
-    az devops service-endpoint delete --id "$sc_id" -y
-fi
-echo "Creating Github service connection: $github_sc_name in Azure DevOps"
-github_sc_id=$(az devops service-endpoint github create \
-    --name "$github_sc_name" \
-    --github-url "$GITHUB_REPO_URL" \
-    --output json |
-    jq -r '.id')
+# if sc_id=$(az devops service-endpoint list -o tsv | grep "$github_sc_name" | awk '{print $3}'); then
+#     echo "Service connection: $github_sc_name already exists. Deleting..."
+#     az devops service-endpoint delete --id "$sc_id" -y
+# fi
+# echo "Creating Github service connection: $github_sc_name in Azure DevOps"
+# github_sc_id=$(az devops service-endpoint github create \
+#     --name "$github_sc_name" \
+#     --github-url "$GITHUB_REPO_URL" \
+#     --output json |
+#     jq -r '.id')
 
-az devops service-endpoint update \
-    --id "$github_sc_id" \
-    --enable-for-all "true"
+# az devops service-endpoint update \
+#     --id "$github_sc_id" \
+#     --enable-for-all "true"

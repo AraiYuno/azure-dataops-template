@@ -51,6 +51,12 @@ stages:
         ArtifactName: 'dist'
       displayName: 'Publish Dist Artifacts'
 
+    - task: PublishBuildArtifacts@1
+      inputs:
+        PathtoPublish: '$(synapseConfigDir)/requirements.txt'
+        ArtifactName: 'synapse_pool_requirements'
+      displayName: 'Publish requirements.txt to Artifacts'
+
   - job: 'publish_static_artifacts'
     displayName: 'Publish Static Artifacts'
     pool:
@@ -61,6 +67,12 @@ stages:
         PathtoPublish: '$(basePath)/databricks'
         ArtifactName: 'databricks'
       displayName: 'Publish Databricks Artifacts'
+
+    - task: PublishBuildArtifacts@1
+      inputs:
+        PathtoPublish: '$(basePath)/synapse'
+        ArtifactName: 'synapse'
+      displayName: 'Publish Synapse Artifacts'
 
     - task: PublishBuildArtifacts@1
       inputs:

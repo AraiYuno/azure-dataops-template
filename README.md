@@ -340,24 +340,24 @@ After a successful deployment, you should have the following resources:
   - **KeyVault** with all relevant secrets stored.
 - In Azure DevOps
   - **Four (4) Azure Pipelines**
-    - mdwdops-cd-release - Release Pipeline
-    - mdwdops-ci-artifacts - Build Pipeline
-    - mdwdops-ci-qa-python - "QA" pipeline runs on PR to `main`
-    - mdwdops-ci-qa-sql - "QA" pipeline runs on PR to `main`
+    - anvil-data-infrastructure-cd-release - Release Pipeline
+    - anvil-data-infrastructure-ci-artifacts - Build Pipeline
+    - anvil-data-infrastructure-ci-qa-python - "QA" pipeline runs on PR to `main`
+    - anvil-data-infrastructure-ci-qa-sql - "QA" pipeline runs on PR to `main`
   - **Three (6) Variables Groups** - two per environment
-    - mdwdops-release-dev
-    - mdwdops-secrets-dev*
-    - mdwdops-release-stg
-    - mdwdops-secrets-stg*
-    - mdwdops-release-prod
-    - mdwdops-secrets-prod*
+    - anvil-data-infrastructure-release-dev
+    - anvil-data-infrastructure-secrets-dev*
+    - anvil-data-infrastructure-release-stg
+    - anvil-data-infrastructure-secrets-stg*
+    - anvil-data-infrastructure-release-prod
+    - anvil-data-infrastructure-secrets-prod*
   - **Four (4) Service Connections**
     - **Three Azure Service Connections** (one per environment) each with a **Service Principal** with Contributor rights to the corresponding Resource Group.
-      - mdwdops-serviceconnection-dev
-      - mdwdops-serviceconnection-stg
-      - mdwdops-serviceconnection-prod
+      - anvil-data-infrastructure-serviceconnection-dev
+      - anvil-data-infrastructure-serviceconnection-stg
+      - anvil-data-infrastructure-serviceconnection-prod
     - **Github Service Connection** for retrieving code from Github
-      - mdwdops-github
+      - anvil-data-infrastructure-github
   - **Three additional Service Principals** (one per environment) with Data Factory Contributor role for running Integration Tests
 
 Notes:
@@ -367,7 +367,7 @@ Notes:
 
 #### Clean up
 
-This sample comes with an [optional, interactive clean-up script](./scripts/clean_up.sh) which will delete resources with `mdwdops` in its name. It will list resources to be deleted and will prompt before continuing. IMPORTANT NOTE: As it simply searches for `mdwdops` in the resource name, it could list resources not part of the deployment! Use with care.
+This sample comes with an [optional, interactive clean-up script](./scripts/clean_up.sh) which will delete resources with `anvil-data-infrastructure-` in its name. It will list resources to be deleted and will prompt before continuing. IMPORTANT NOTE: As it simply searches for `anvil-data-infrastructure-` in the resource name, it could list resources not part of the deployment! Use with care.
 
 ### Data Lake Physical layout
 

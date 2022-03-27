@@ -1,5 +1,5 @@
 {
-	"name": "mdwdops-adf-dev-16",
+	"name": "anvil-data-infrastructure-adf-dev-16",
 	"location": "australiaeast",
 	"identity": {
 		"type": "SystemAssigned",
