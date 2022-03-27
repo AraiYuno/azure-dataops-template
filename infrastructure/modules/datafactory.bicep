@@ -6,7 +6,6 @@ param project string
 ])
 param env string
 param location string = resourceGroup().location
-param deployment_id string
 
 // param account_name string = ''
 // param repository_name string = ''
@@ -14,7 +13,7 @@ param deployment_id string
 // param root_folder string = '/e2e_samples/parking_sensors/adf'
 
 resource datafactory 'Microsoft.DataFactory/factories@2018-06-01' = {
-  name: '${project}-adf-${env}-${deployment_id}'
+  name: '${project}-adf-${env}'
   location: location
   tags: {
     DisplayName: 'Data Factory'

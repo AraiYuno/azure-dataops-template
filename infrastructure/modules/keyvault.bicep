@@ -6,14 +6,13 @@ param project string
 ])
 param env string
 param location string = resourceGroup().location
-param deployment_id string
 
 param keyvault_owner_object_id string
 param datafactory_principal_id string
 
 
 resource keyvault 'Microsoft.KeyVault/vaults@2019-09-01' = {
-  name: '${project}-kv-${env}-${deployment_id}'
+  name: '${project}-kv-${env}'
   location: location
   tags: {
     DisplayName: 'Keyvault'

@@ -23,7 +23,6 @@ AZURE_LOCATION="eastus2"
 AZURE_SUBSCRIPTION_ID="48fa33af-e847-429c-9400-c93a7d3d8f47"
 
 # String appended to all resource names to ensure uniqueness of azure resource names. Default: random five character string
-# DEPLOYMENT_ID=
 
 # git branch where Azure DevOps pipelines definitions are retrieved from. Default: main
 AZDO_PIPELINES_BRANCH_NAME="prod"

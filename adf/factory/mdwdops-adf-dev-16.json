@@ -1,5 +1,5 @@
 {
-	"name": "anvil-data-infrastructure-adf-dev-16",
+	"name": "anvil-dm-adf-dev",
 	"location": "australiaeast",
 	"identity": {
 		"type": "SystemAssigned",

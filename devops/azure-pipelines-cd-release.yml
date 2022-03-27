@@ -5,14 +5,14 @@ pr: none
 resources:
   pipelines:
   - pipeline: ciartifacts
-    source: anvil-data-infrastructure-ci-artifacts
+    source: anvil-dm-ci-artifacts
     trigger: 
       branches:
       - main
   repositories:
   - repository: mdwdataops_adfpublish
     type: github
-    endpoint: anvil-data-infrastructure-github
+    endpoint: anvil-dm-github
     name: devlace/mdw-dataops-clone
     ref: adf_publish
 
@@ -25,8 +25,8 @@ stages:
 - stage: deploy_to_dev
   displayName: 'Deploy to DEV'  # In DEV, excludes publishing to ADF as this is a manual publish step
   variables:
-  - group: anvil-data-infrastructure-release-dev
-  - group: anvil-data-infrastructure-secrets-dev
+  - group: anvil-dm-release-dev
+  - group: anvil-dm-secrets-dev
   jobs:
   - template: templates/jobs/deploy-databricks-job.yml
     parameters:
@@ -34,13 +34,13 @@ stages:
   - template: templates/jobs/deploy-azuresqldb-job.yml
     parameters:
       environmentName: 'DEV'
-      serviceConnection: 'anvil-data-infrastructure-serviceconnection-dev'
+      serviceConnection: 'anvil-dm-serviceconnection-dev'
 
 - stage: deploy_to_stg
   displayName: 'Deploy to Stage'
   variables:
-  - group: anvil-data-infrastructure-release-stg
-  - group: anvil-data-infrastructure-secrets-stg
+  - group: anvil-dm-release-stg
+  - group: anvil-dm-secrets-stg
   jobs: 
   - template: templates/jobs/deploy-databricks-job.yml
     parameters:
@@ -48,19 +48,19 @@ stages:
   - template: templates/jobs/deploy-azuresqldb-job.yml
     parameters:
       environmentName: 'STG'
-      serviceConnection: 'anvil-data-infrastructure-serviceconnection-stg'
+      serviceConnection: 'anvil-dm-serviceconnection-stg'
   - template: templates/jobs/deploy-adf-job.yml
     parameters:
       environmentName: 'STG'
-      serviceConnection: 'anvil-data-infrastructure-serviceconnection-stg'
+      serviceConnection: 'anvil-dm-serviceconnection-stg'
   # Integration tests
   - template: templates/jobs/integration-tests-job.yml
 
 - stage: deploy_to_prod
   displayName: 'Deploy to Prod'
   variables:
-  - group: anvil-data-infrastructure-release-prod
-  - group: anvil-data-infrastructure-secrets-prod
+  - group: anvil-dm-release-prod
+  - group: anvil-dm-secrets-prod
   jobs: 
   - template: templates/jobs/deploy-databricks-job.yml
     parameters:
@@ -68,8 +68,8 @@ stages:
   - template: templates/jobs/deploy-azuresqldb-job.yml
     parameters:
       environmentName: 'PROD'
-      serviceConnection: 'anvil-data-infrastructure-serviceconnection-prod'
+      serviceConnection: 'anvil-dm-serviceconnection-prod'
   - template: templates/jobs/deploy-adf-job.yml
     parameters:
       environmentName: 'PROD'
-      serviceConnection: 'anvil-data-infrastructure-serviceconnection-prod'
+      serviceConnection: 'anvil-dm-serviceconnection-prod'

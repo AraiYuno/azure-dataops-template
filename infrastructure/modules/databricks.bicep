@@ -6,7 +6,6 @@ param project string
 ])
 param env string
 param location string = resourceGroup().location
-param deployment_id string
 param contributor_principal_id string
 
 
@@ -15,7 +14,7 @@ var contributor = '/subscriptions/${subscription().subscriptionId}/providers/Mic
 
 
 resource databricks 'Microsoft.Databricks/workspaces@2018-04-01' = {
-  name: '${project}-dbw-${env}-${deployment_id}'
+  name: '${project}-dbw-${env}'
   location: location
   tags: {
     DisplayName: 'Databricks Workspace'
@@ -25,7 +24,7 @@ resource databricks 'Microsoft.Databricks/workspaces@2018-04-01' = {
     name: 'premium'
   }
   properties: {
-    managedResourceGroupId: '${subscription().id}/resourceGroups/${project}-dbw-rg-${env}-${deployment_id}'
+    managedResourceGroupId: '${subscription().id}/resourceGroups/${project}-dbw-rg-${env}'
   }
 }
 

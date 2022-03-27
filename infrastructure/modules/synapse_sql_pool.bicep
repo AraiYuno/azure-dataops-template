@@ -1,7 +1,6 @@
 param project string
 param env string
 param location string = resourceGroup().location
-param deployment_id string
 
 param sql_server_username string = 'sqlAdmin'
 @secure()
@@ -9,7 +8,7 @@ param sql_server_password string
 
 
 resource sql_server 'Microsoft.Sql/servers@2021-02-01-preview' = {
-  name: '${project}-sql-${env}-${deployment_id}'
+  name: '${project}-sql-${env}'
   location: location
   tags: {
     DisplayName: 'SQL Server'
@@ -21,7 +20,7 @@ resource sql_server 'Microsoft.Sql/servers@2021-02-01-preview' = {
   }
 
   resource synapse_dedicated_sql_pool 'databases@2021-02-01-preview' = {
-    name: '${project}-syndp-${env}-${deployment_id}'
+    name: '${project}-syndp-${env}'
     location: location
     tags: {
       DisplayName: 'Synapse Dedicated SQL Pool'

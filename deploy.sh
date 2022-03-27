@@ -26,13 +26,12 @@ set -o nounset
 . ./scripts/init_environment.sh
 
 
-project=anvil # CONSTANT - this is prefixes to all resources of the Parking Sensor sample
+project=anvil-dm # CONSTANT
 ###################
 # DEPLOY ALL FOR EACH ENVIRONMENT
 
 # for env_name in dev stg prod; do  # dev stg prod
 #     PROJECT=$project \
-#     DEPLOYMENT_ID=$DEPLOYMENT_ID \
 #     ENV_NAME=$env_name \
 #     AZURE_LOCATION=$AZURE_LOCATION \
 #     AZURE_SUBSCRIPTION_ID=$AZURE_SUBSCRIPTION_ID \
@@ -45,13 +44,13 @@ project=anvil # CONSTANT - this is prefixes to all resources of the Parking Sens
 # Deploy AzDevOps Pipelines
 
 # azure-pipelines-cd-release.yml pipeline require DEV_DATAFACTORY_NAME set, retrieve this value from .env.dev file
-# declare DEV_"$(grep -e '^DATAFACTORY_NAME' .env.dev | tail -1 | xargs)"
+declare DEV_"$(grep -e '^DATAFACTORY_NAME' .env.dev | tail -1 | xargs)"
 
 # Deploy all pipelines
 PROJECT=$project \
 AZURE_REPO=$AZURE_REPO \
 AZDO_PIPELINES_BRANCH_NAME=$AZDO_PIPELINES_BRANCH_NAME \
-DEV_DATAFACTORY_NAME="anvil-adf-dev-dm" \
+DEV_DATAFACTORY_NAME=$DATAFACTORY_NAME \
     bash -c "./scripts/deploy_azdo_pipelines.sh"
 
 ####
@@ -63,4 +62,4 @@ print_style "IMPORTANT:
 This script has updated your local Azure Pipeline YAML definitions to point to your Github repo.
 ACTION REQUIRED: Commit and push up these changes to your Github repo before proceeding.\n\n" "warning"
 
-echo "See README > Setup and Deployment for more details and next steps." 
+echo "Author: Kyle Ahn. pyh2982@gmail.com" 

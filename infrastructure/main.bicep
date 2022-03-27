@@ -1,48 +1,43 @@
 param project string = 'mdwdo'
 param env string = 'dev'
 param location string = resourceGroup().location
-param deployment_id string
 param keyvault_owner_object_id string
 
 module datafactory './modules/datafactory.bicep' = {
-  name: 'datafactory_deploy_${deployment_id}'
+  name: 'datafactory_deploy'
   params: {
     project: project
     env: env
     location: location
-    deployment_id: deployment_id
   }
 }
 
 module databricks './modules/databricks.bicep' = {
-  name: 'databricks_deploy_${deployment_id}'
+  name: 'databricks_deploy'
   params: {
     project: project
     env: env
     location: location
-    deployment_id: deployment_id
     contributor_principal_id: datafactory.outputs.datafactory_principal_id
   }
 }
 
 module storage './modules/storage.bicep' = {
-  name: 'storage_deploy_${deployment_id}'
+  name: 'storage_deploy'
   params: {
     project: project
     env: env
     location: location
-    deployment_id: deployment_id
     contributor_principal_id: datafactory.outputs.datafactory_principal_id
   }
 }
 
 module keyvault './modules/keyvault.bicep' = {
-  name: 'keyvault_deploy_${deployment_id}'
+  name: 'keyvault_deploy'
   params: {
     project: project
     env: env
     location: location
-    deployment_id: deployment_id
     keyvault_owner_object_id: keyvault_owner_object_id
     datafactory_principal_id: datafactory.outputs.datafactory_principal_id
   }
@@ -53,12 +48,11 @@ module keyvault './modules/keyvault.bicep' = {
 }
 
 module appinsights './modules/appinsights.bicep' = {
-  name: 'appinsights_deploy_${deployment_id}'
+  name: 'appinsights_deploy'
   params: {
     project: project
     env: env
     location: location
-    deployment_id: deployment_id
   }
 }
 
