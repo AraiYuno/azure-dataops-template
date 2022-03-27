@@ -1,7 +1,13 @@
 #!/bin/bash
 
 # check required variables are specified.
-GITHUB_REPO="AraiYuno/anvil-data-services"
+GITHUB_REPO="https://dev.azure.com/price-industries/Data%20Management/_git/anvil-data-services"
+GITHUB_PAT_TOKEN="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"
+AZDO_PROJECT="Data Management"
+AZURE_LOCATION="eastus2"
+AZURE_SUBSCRIPTION_ID="48fa33af-e847-429c-9400-c93a7d3d8f47"
+AZDO_PIPELINES_BRANCH_NAME="prod"
+AZURESQL_SERVER_PASSWORD="W:!fchmcXruLsKD*4)aY'SMWQ/kw{vAC"
 if [ -z "$GITHUB_REPO" ]
 then 
     echo "Please specify a github repo using the GITHUB_REPO environment variable in this form '<my_github_handle>/<repo>'. (ei. 'devlace/mdw-dataops-import')"

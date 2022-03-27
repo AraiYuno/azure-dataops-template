@@ -27,8 +27,7 @@ set -o nounset
 
 
 project=anvil # CONSTANT - this is prefixes to all resources of the Parking Sensor sample
-github_repo_url="https://dev.azure.com/price-industries/Data%20Management/_git/anvil-data-services"
-
+github_repo_url=$GITHUB_REPO
 
 ###################
 # DEPLOY ALL FOR EACH ENVIRONMENT
