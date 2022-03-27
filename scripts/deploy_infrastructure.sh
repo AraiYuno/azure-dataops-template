@@ -34,7 +34,6 @@ set -o xtrace # For debugging
 # REQUIRED ENV VARIABLES:
 #
 # PROJECT
-# DEPLOYMENT_ID
 # ENV_NAME
 # AZURE_LOCATION
 # AZURE_SUBSCRIPTION_ID
@@ -49,7 +48,7 @@ echo "Deploying to Subscription: $AZURE_SUBSCRIPTION_ID"
 az account set --subscription "$AZURE_SUBSCRIPTION_ID"
 
 # Create resource group
-resource_group_name="$PROJECT-$DEPLOYMENT_ID-$ENV_NAME-rg"
+resource_group_name="$PROJECT-$ENV_NAME-rg"
 echo "Creating resource group: $resource_group_name"
 az group create --name "$resource_group_name" --location "$AZURE_LOCATION" --tags Environment="$ENV_NAME"
 
@@ -63,7 +62,7 @@ arm_output=$(az deployment group validate \
     --resource-group "$resource_group_name" \
     --template-file "./infrastructure/main.bicep" \
     --parameters @"./infrastructure/main.parameters.${ENV_NAME}.json" \
-    --parameters project="${PROJECT}" keyvault_owner_object_id="${kv_owner_object_id}" deployment_id="${DEPLOYMENT_ID}" \
+    --parameters project="${PROJECT}" keyvault_owner_object_id="${kv_owner_object_id}" \
     --output json)
 
 # Deploy arm template
@@ -72,7 +71,7 @@ arm_output=$(az deployment group create \
     --resource-group "$resource_group_name" \
     --template-file "./infrastructure/main.bicep" \
     --parameters @"./infrastructure/main.parameters.${ENV_NAME}.json" \
-    --parameters project="${PROJECT}" deployment_id="${DEPLOYMENT_ID}" keyvault_owner_object_id="${kv_owner_object_id}" \
+    --parameters project="${PROJECT}" keyvault_owner_object_id="${kv_owner_object_id}" \
     --output json)
 
 if [[ -z $arm_output ]]; then
@@ -149,7 +148,7 @@ stor_id=$(az storage account show \
     --resource-group "$resource_group_name" \
     --output json |
     jq -r '.id')
-sp_stor_name="${PROJECT}-stor-${ENV_NAME}-${DEPLOYMENT_ID}-sp"
+sp_stor_name="${PROJECT}-stor-${ENV_NAME}-sp"
 sp_stor_out=$(az ad sp create-for-rbac \
     --role "Storage Blob Data Contributor" \
     --scopes "$stor_id" \
@@ -215,7 +214,7 @@ ADF_DIR=$adfTempDir \
     bash -c "./scripts/deploy_adf_artifacts.sh"
 
 # ADF SP for integration tests
-sp_adf_name="${PROJECT}-adf-${ENV_NAME}-${DEPLOYMENT_ID}-sp"
+sp_adf_name="${PROJECT}-adf-${ENV_NAME}-sp"
 sp_adf_out=$(az ad sp create-for-rbac \
     --role "Data Factory contributor" \
     --scopes "/subscriptions/$AZURE_SUBSCRIPTION_ID/resourceGroups/$resource_group_name/providers/Microsoft.DataFactory/factories/$datafactory_name" \
@@ -238,7 +237,6 @@ az keyvault secret set --vault-name "$kv_name" --name "spAdfTenantId" --value "$
 PROJECT=$PROJECT \
 ENV_NAME=$ENV_NAME \
 RESOURCE_GROUP_NAME=$resource_group_name \
-DEPLOYMENT_ID=$DEPLOYMENT_ID \
     bash -c "./scripts/deploy_azdo_service_connections_azure.sh"
 
 # AzDO Variable Groups

@@ -26,7 +26,7 @@ set -o nounset
 # PARAMETERS
 #
 # RESOURCE_GROUP_NAME_PREFIX
-prefix="anvil-data-infrastructure-"
+prefix="anvil-dm"
 
 echo "!! WARNING: !!"
 echo "THIS SCRIPT WILL DELETE RESOURCES PREFIXED WITH $prefix !!"
